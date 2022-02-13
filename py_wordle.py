@@ -19,6 +19,7 @@ from termcolor import colored
 #         else:
 #             print(x + "NOT ADDED")
 #             continue
+
 alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 wrong_letters = []
 user_guesses = []
@@ -32,15 +33,24 @@ def cls():
         _ = system('clear')
 
 
-def print2(*text):
+def print2(text):
     for x in text:
-        sys.stdout.write(x + ' ')
+        sys.stdout.write(f'{x} ')
     print()
 
 
 def print_blue(text):
-    output = colored(text, 'blue')
-    print2(output)
+    out_list = []
+    for x in text:
+        if x == 'X':
+            out_list.append(colored(x,'red'))
+        elif x == '?':
+            out_list.append(colored(x,'yellow'))
+        else:
+            out_list.append(colored(x,'cyan'))
+
+    output = ' '.join(out_list)
+    print(output)
     # print(colored(text, 'blue'))
 
 
@@ -112,13 +122,13 @@ if __name__ == '__main__':
         if len(user_guesses) >= 1:
             for x in range(len(user_guesses)):
                 print2(user_guesses[x])
-                print2(print_blue(guess_guides[x]))
+                print_blue(guess_guides[x])
 
         print('\nRemaining Letters:')
         print2(alphabet)
         print('Wrong Letters:')
         print2(wrong_letters)
-        print_blue(blank)
+        print2(blank)
 
         if ''.join(blank) == game_word:
             print(f"You Won!\nThe word is: {game_word}")
