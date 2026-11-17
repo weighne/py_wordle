@@ -24,6 +24,9 @@ alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q',
 wrong_letters = []
 user_guesses = []
 guess_guides = []
+with open("words_5_clean.txt","r") as wordlist:
+    words = [x.strip() for x in wordlist.readlines()]
+
 
 def cls():
     input('Press any key to continue...')
@@ -49,9 +52,7 @@ def print_blue(text):
         else:
             out_list.append(colored(x,'cyan'))
 
-    output = ' '.join(out_list)
-    print(output)
-    # print(colored(text, 'blue'))
+    print(' '.join(out_list))
 
 
 def get_word():
@@ -63,39 +64,26 @@ def get_word():
         return word
 
 
-def set_array(word):
-    blank = []
-
-    for x in word:
-        blank.append('_')
-
-    return blank
-
-
 def check_guess(user_input, word, blank):
     letter_guide = []
     user_guesses.append(user_input)
     print2(user_input)
 
-    # global wrong_letters
     for x in range(len(user_input)):
-        if user_input[x] == word[x]:
-            # print(f"Letter {x+1} Match!")
+        if user_input[x] == word[x]:  # Match
             sys.stdout.write(user_input[x] + ' ')
             letter_guide.append(user_input[x])
             blank[x] = user_input[x]
             for y in range(len(alphabet)):
                 if alphabet[y] == user_input[x]:
                     alphabet[y] = f'{user_input[x]}'
-        elif user_input[x] in word:
-            # print(f"Letter {x+1} Wrong spot, right letter!")
+        elif user_input[x] in word:  # Wrong spot, right letter
             sys.stdout.write('? ')
             letter_guide.append('?')
             for y in range(len(alphabet)):
                 if alphabet[y] == user_input[x]:
                     alphabet[y] = f'({user_input[x]})'
-        else:
-            # print(f"Letter {x+1} Wrong letter entirely!")
+        else:  # Wrong letter entirely
             sys.stdout.write('X ')
             letter_guide.append('X')
             for y in range(len(alphabet)-1):
@@ -108,15 +96,21 @@ def check_guess(user_input, word, blank):
 
     guess_guides.append(''.join(letter_guide))
 
+
 def get_input():
-    user_input = input("Guess a 5 letter word: ")
+    while True:
+        user_input = input("Guess a 5 letter word: ")
+        if user_input not in words:
+            print("Invalid guess, try again!")
+        else: break
     return user_input
 
 if __name__ == '__main__':
     guesses = 0
     game_word = get_word()
     # print(game_word)
-    blank = set_array(game_word)
+    blank = ['_' for x in game_word]
+    
     while True:
         cls()
         if len(user_guesses) >= 1:
